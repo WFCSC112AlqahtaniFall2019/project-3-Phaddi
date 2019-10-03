@@ -1,3 +1,9 @@
+//Ryan Phadnis
+//CSC 112
+//10/3/2019
+//This program performs both a merge sort and a bubble sort on
+//the same sets of data, timing how long each one takes
+
 #include <iostream>
 #include <vector>
 #include <ctime>
@@ -12,17 +18,28 @@ void mergeSortedLists(vector<int>& a, vector<int>& tmp, int leftPos, int rightPo
 void swap (int *a, int *b);
 void bubbleSort(int *a, int n);
 
-int main() {
+/* argc, char* argv[]*/
+int main(int argc, char* argv[]) {
+
+    if(argc != 3)
+    {
+        cout << "Usage: ./BubbleSort <seed> <length>\n";
+        exit(1);
+    }
+
     // get input: first is random seed, second is vector length
     int seed, length;
-    cin >> seed >> length;
+
+    //use command line arguments instead of cin
+    seed = atoi(argv[1]);
+    length = atoi(argv[2]);
     srand(seed);
 
     vector<int> v(length); // vector to be sorted
     vector<int> t(length); // temporary workspace
 
     // define an integer pointer dynamically allocate an array of integers
-    /* your code here */
+    int* A = new int[length];
 
     // initialize and print input
     cout << "Unsorted:" << endl;
@@ -33,7 +50,10 @@ int main() {
     cout << endl;
 
     // copy the random list of integers from vector to array
-    /* your code here */
+    for(int i = 0; i < length; i++)
+    {
+        A[i] = v.at(i);
+    }
 
     clock_t start_mergeSort = clock();
     // sort vector using mergeSort
@@ -45,24 +65,31 @@ int main() {
         assert(v.at(i-1) <= v.at(i));
     }
 
-    // check output, make sure array is sorted after bubbleSort
-    /* your code here */
-
     clock_t start_bubbleSort = clock();
     // sort array using bubbleSort
-    /* your code here */
+    bubbleSort(A, length);
     clock_t end_bubbleSort = clock();
 
+    // check output, make sure array is sorted after bubbleSort
+    for(int i = 1; i < length; i++)
+    {
+        assert(A[i-1] <= A[i]);
+    }
 
     // print sorted vector after mergeSort
-    cout << "Sorted:" << endl;
+    cout << "Sorted with mergeSort: " << endl;
     for (int i = 0; i < v.size(); i++) {
         cout << v.at(i) << '\t';
     }
     cout << endl;
 
     // print sorted array after bubbleSort
-    /* your code here */
+    cout << "Sorted with bubbleSort: " << endl;
+    for(int i = 0; i < length; i++)
+    {
+        cout << A[i] << '\t';
+    }
+    cout << endl;
 
     // print elapsed time for mergeSort and bubbleSort
     double elapsed_mergeSort = double(end_mergeSort - start_mergeSort) / CLOCKS_PER_SEC;
@@ -110,10 +137,22 @@ void mergeSort(vector<int>& a, vector<int>& tmp, int left, int right) {
 
 // Swap function
 void swap(int *a, int *b) {
-    /* your code here */
+    int temp;
+    temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
 // BubbleSort function
 void bubbleSort(int *a, int n) {
-    /* your code here */
+    for(int i = 0; i < n - 1; i++)
+    {
+        for(int j = 0; j < n - i - 1; j++)
+        {
+            if(a[j] > a[j+1])
+            {
+                swap(a[j], a[j+1]);
+            }
+        }
+    }
 }
